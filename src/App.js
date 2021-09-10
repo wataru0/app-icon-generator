@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import "bulma/css/bulma.css";
 
 function Header() {
@@ -15,20 +15,37 @@ function Header() {
     </header>
   );
 }
-function Image() {
+function Image(props) {
   return (
     <div>
       <figure className="image is-square">
         <img
           id="preview"
           // src="https://images.dog.ceo/breeds/shiba/shiba-8.jpg" 
+          // 親コンポーネントから渡されたプロパティはpropsを使ってアクセスできる！！
+          src={props.fileUrl}
           alt="" />
       </figure>
     </div>
   );
 }
 
+// const previewImage = (obj) => {
+//   let fileRoader = new FileReader();
+//   fileRoader.onload = (() => {
+//     // htmlの書き方
+//     // document.getElementById('preview').src = fileRoader.result;
+//   });
+//   fileRoader.readAsDataURL(obj.files[0]);
+// }
+
 function Main() {
+  const [fileUrl, setFileUrl] = useState("https://images.dog.ceo/breeds/shiba/shiba-8.jpg");
+  const previewImage = (event) => {
+    const imageFile = event.target.files.item(0);
+    const imageUrl = URL.createObjectURL(imageFile);
+    setFileUrl(imageUrl)
+  }
   return (
     <div className="container">
       <div className="columns is-vcentered">
@@ -37,9 +54,9 @@ function Main() {
             <div className="box">
               <div className="field">
                 <input id="inputImage" type="file" name="img"
-                  accept="image/*"></input>
+                  accept="image/*" onChange={previewImage}></input>
               </div>
-              <Image />
+              <Image fileUrl={fileUrl}/>
             </div>
           </form>
         </div>
