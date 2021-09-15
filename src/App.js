@@ -1,57 +1,9 @@
-import React, { useState, useEffect } from "react";
-import "bulma/css/bulma.css";
-
-function Header() {
-  return (
-    <header>
-      <div className="hero is-primary is-bold">
-        <div className="hero-body">
-          <div className="container">
-            <h1 className="title">App Icon Generator</h1>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
-function Image(props) {
-  if (props.fileUrl === null) {
-    return <div />;
-  }
-  return (
-    <div>
-      <figure className="image">
-        <img
-          id="preview"
-          // src="https://images.dog.ceo/breeds/shiba/shiba-8.jpg" 
-          // 親コンポーネントから渡されたプロパティはpropsを使ってアクセスできる！！
-          src={props.fileUrl}
-          alt=" " />
-      </figure>
-    </div>
-  );
-}
-
-function DlLink(props) {
-  const [boxValue, setBoxValue] = useState(['iOS']);
-  if (props.data === null || props.loaded === false || props.flag === false) {
-    return <div />;
-  }
-  return (
-    <div>
-      <div>
-        <label>
-          <input type="checkbox" name="iOS" value="1" /> iOS and macOS
-        </label>
-        <div />
-        <label>
-          <input type="checkbox" name="Android" value="2" /> Android
-        </label>
-      </div>
-      <a className="button is-fullwidth is-primary is-outlined" href={props.data} download="sample.png">download</a>
-    </div>
-  );
-}
+import React, { useState, useEffect } from 'react';
+import 'bulma/css/bulma.css';
+import DlLinks from './components/DlLinks'
+import Footer from './components/Footer';
+import Header from './components/Header';
+import Image from './components/Image';
 
 function Main() {
   const [fileUrl, setFileUrl] = useState(null);
@@ -91,11 +43,12 @@ function Main() {
         let dstHeight = 400;
         canvas.width = dstWidth;
         canvas.height = dstHeight;
-        context.drawImage(img, 0, 0, 1024, 1024, 0, 0, dstWidth, dstHeight);
+        // context.drawImage(img, 0, 0, 1024, 1024, 0, 0, dstWidth, dstHeight);
+        context.drawImage(img, 0, 0)
         setLoaded(true);
       }
     }
-  }, [context, fileUrl]);
+  }, [context, fileUrl, canvas]);
 
   // useEffect(() => {
   //   if (loaded) {
@@ -148,24 +101,11 @@ function Main() {
               Generate
             </button>
           </div>
-          {/* <Canvas fileUrl={fileUrl} /> */}
-          <DlLink data={resizeData} loaded={loaded} flag={flag} />
+          <DlLinks data={resizeData} loaded={loaded} flag={flag} imageUrl={fileUrl}/>
         </div>
       </div>
       <br />
     </div>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="footer">
-      <div className="content has-text-centered">
-        <p>Made with love in Chiba, Japan</p>
-        <a href="https://wataru0.github.io/portfolio/AppIconGenerator/PrivacyPolicy/">Privacy Policy</a>
-        <p> By wataru0</p>
-      </div>
-    </footer>
   );
 }
 
